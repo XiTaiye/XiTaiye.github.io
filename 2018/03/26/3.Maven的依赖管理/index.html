@@ -1,0 +1,415 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>Maven的依赖管理 | 然后的学习笔记</title><meta name="author" content="然后"><meta name="copyright" content="然后"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="依赖管理依赖配置依赖：指当前项目运行所需要的jar包。一个项目中可以引入多个依赖： 例如：在当前工程中，我们需要用到logback来记录日志，此时就可以在maven工程的pom.xml文件中，引入logback的依赖。具体步骤如下：  在pom.xml中编写标签  在标签中使用引入坐标  定义坐标的 groupId、artifactId、version   1234567891011121314&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Maven的依赖管理">
+<meta property="og:url" content="http://xitaiye.github.io.git/2018/03/26/3.Maven%E7%9A%84%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="然后的学习笔记">
+<meta property="og:description" content="依赖管理依赖配置依赖：指当前项目运行所需要的jar包。一个项目中可以引入多个依赖： 例如：在当前工程中，我们需要用到logback来记录日志，此时就可以在maven工程的pom.xml文件中，引入logback的依赖。具体步骤如下：  在pom.xml中编写标签  在标签中使用引入坐标  定义坐标的 groupId、artifactId、version   1234567891011121314&amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20220616115445812.png">
+<meta property="article:published_time" content="2018-03-26T00:00:00.000Z">
+<meta property="article:modified_time" content="2018-03-26T00:00:00.000Z">
+<meta property="article:author" content="然后">
+<meta property="article:tag" content="Maven">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20220616115445812.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://xitaiye.github.io.git/2018/03/26/3.Maven%E7%9A%84%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Maven的依赖管理',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2018-03-26 08:00:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avator.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">48</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22maven.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="然后的学习笔记"><img class="site-icon" src="/img/logo.png"/><span class="site-name">然后的学习笔记</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Maven的依赖管理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-03-26T00:00:00.000Z" title="发表于 2018-03-26 08:00:00">2018-03-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2018-03-26T00:00:00.000Z" title="更新于 2018-03-26 08:00:00">2018-03-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Maven/">Maven</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Maven的依赖管理"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h1><h2 id="依赖配置"><a href="#依赖配置" class="headerlink" title="依赖配置"></a>依赖配置</h2><p>依赖：指当前项目运行所需要的jar包。一个项目中可以引入多个依赖：</p>
+<p>例如：在当前工程中，我们需要用到logback来记录日志，此时就可以在maven工程的pom.xml文件中，引入logback的依赖。具体步骤如下：</p>
+<ol>
+<li><p>在pom.xml中编写<dependencies>标签</p>
+</li>
+<li><p>在<dependencies>标签中使用<dependency>引入坐标</p>
+</li>
+<li><p>定义坐标的 groupId、artifactId、version</p>
+</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 第1个依赖 : logback --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>ch.qos.logback<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>logback-classic<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.11<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 第2个依赖 : junit --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>点击刷新按钮，引入最新加入的坐标<ul>
+<li>刷新依赖：保证每一次引入新的依赖，或者修改现有的依赖配置，都可以加入最新的坐标</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221130184402805.png" alt="image-20221130184402805">  </p>
+<blockquote>
+<p>注意事项：</p>
+<ol>
+<li>如果引入的依赖，在本地仓库中不存在，将会连接远程仓库 &#x2F; 中央仓库，然后下载依赖（这个过程会比较耗时，耐心等待）</li>
+<li>如果不知道依赖的坐标信息，可以到mvn的中央仓库（<a target="_blank" rel="noopener" href="https://mvnrepository.com/%EF%BC%89%E4%B8%AD%E6%90%9C%E7%B4%A2">https://mvnrepository.com/）中搜索</a></li>
+</ol>
+</blockquote>
+<h3 id="添加依赖的几种方式："><a href="#添加依赖的几种方式：" class="headerlink" title="添加依赖的几种方式："></a><strong>添加依赖的几种方式：</strong></h3><ol>
+<li><p>利用中央仓库搜索的依赖坐标</p>
+<img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%225.gif" style="zoom:80%;" />
+
+
+</li>
+<li><p>利用IDEA工具搜索依赖</p>
+<img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%226.gif" style="zoom:80%;" />
+
+
+</li>
+<li><p>熟练上手maven后，快速导入依赖</p>
+<img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%227.gif" style="zoom:80%;" /></li>
+</ol>
+<h2 id="依赖传递"><a href="#依赖传递" class="headerlink" title="依赖传递"></a>依赖传递</h2><h3 id="依赖具有传递性"><a href="#依赖具有传递性" class="headerlink" title="依赖具有传递性"></a>依赖具有传递性</h3><p>早期我们没有使用maven时，向项目中添加依赖的jar包，需要把所有的jar包都复制到项目工程下。如下图所示，需要logback-classic时，由于logback-classic又依赖了logback-core和slf4j，所以必须把这3个jar包全部复制到项目工程下</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201120514644.png" alt="image-20221201120514644"></p>
+<p>我们现在使用了maven，当项目中需要使用logback-classic时，只需要在pom.xml配置文件中，添加logback-classic的依赖坐标即可。</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201113659400.png" alt="image-20221201113659400"></p>
+<p>在pom.xml文件中只添加了logback-classic依赖，但由于maven的依赖具有传递性，所以会自动把所依赖的其他jar包也一起导入。</p>
+<p>依赖传递可以分为：</p>
+<ol>
+<li><p>直接依赖：在当前项目中通过依赖配置建立的依赖关系</p>
+</li>
+<li><p>间接依赖：被依赖的资源如果依赖其他资源，当前项目间接依赖其他资源</p>
+</li>
+</ol>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20220616115445812.png" alt="image-20220616115445812"> </p>
+<p>比如以上图中：</p>
+<ul>
+<li>projectA依赖了projectB。对于projectA 来说，projectB 就是直接依赖。</li>
+<li>而projectB依赖了projectC及其他jar包。 那么此时，在projectA中也会将projectC的依赖传递下来。对于projectA 来说，projectC就是间接依赖。</li>
+</ul>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201115801806.png" alt="image-20221201115801806"></p>
+<h3 id="排除依赖"><a href="#排除依赖" class="headerlink" title="排除依赖"></a>排除依赖</h3><p>问题：之前我们讲了依赖具有传递性。那么A依赖B，B依赖C，如果A不想将C依赖进来，是否可以做到？ </p>
+<p>答案：在maven项目中，我们可以通过排除依赖来实现。</p>
+<p>什么是排除依赖？</p>
+<ul>
+<li>排除依赖：指主动断开依赖的资源。（被排除的资源无需指定版本）</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.itheima<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-projectB<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">   </span><br><span class="line">    <span class="comment">&lt;!--排除依赖, 主动断开依赖的资源--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>依赖排除示例：</p>
+<ul>
+<li>maven-projectA依赖了maven-projectB，maven-projectB依赖了Junit。基于依赖的传递性，所以maven-projectA也依赖了Junit</li>
+</ul>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201141929240.png" alt="image-20221201141929240"></p>
+<ul>
+<li>使用排除依赖后</li>
+</ul>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201142501556.png" alt="image-20221201142501556"></p>
+<h3 id="依赖范围"><a href="#依赖范围" class="headerlink" title="依赖范围"></a>依赖范围</h3><p>在项目中导入依赖的jar包后，默认情况下，可以在任何地方使用。</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201135142706.png" alt="image-20221201135142706"></p>
+<p>如果希望限制依赖的使用范围，可以通过<scope>标签设置其作用范围。</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20220616123806894.png" alt="image-20220616123806894"> </p>
+<p>作用范围：</p>
+<ol>
+<li><p>主程序范围有效（main文件夹范围内）</p>
+</li>
+<li><p>测试程序范围有效（test文件夹范围内）</p>
+</li>
+<li><p>是否参与打包运行（package指令范围内）</p>
+</li>
+</ol>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201140140947.png" alt="image-20221201140140947"></p>
+<p>如上图所示，给junit依赖通过scope标签指定依赖的作用范围。 那么这个依赖就只能作用在测试环境，其他环境下不能使用。</p>
+<p>scope标签的取值范围：</p>
+<table>
+<thead>
+<tr>
+<th><strong>scope</strong>值</th>
+<th><strong>主程序</strong></th>
+<th><strong>测试程序</strong></th>
+<th><strong>打包（运行）</strong></th>
+<th><strong>范例</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>compile（默认）</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>log4j</td>
+</tr>
+<tr>
+<td>test</td>
+<td>-</td>
+<td>Y</td>
+<td>-</td>
+<td>junit</td>
+</tr>
+<tr>
+<td>provided</td>
+<td>Y</td>
+<td>Y</td>
+<td>-</td>
+<td>servlet-api</td>
+</tr>
+<tr>
+<td>runtime</td>
+<td>-</td>
+<td>Y</td>
+<td>Y</td>
+<td>jdbc驱动</td>
+</tr>
+</tbody></table>
+<h3 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3><h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>Maven的生命周期就是为了对所有的构建过程进行抽象和统一。 描述了一次项目构建，经历哪些阶段。</p>
+<p>在Maven出现之前，项目构建的生命周期就已经存在，软件开发人员每天都在对项目进行清理，编译，测试及部署。虽然大家都在不停地做构建工作，但公司和公司间、项目和项目间，往往使用不同的方式做类似的工作。</p>
+<p>Maven从大量项目和构建工具中学习和反思，然后总结了一套高度完美的，易扩展的项目构建生命周期。这个生命周期包含了项目的清理，初始化，编译，测试，打包，集成测试，验证，部署和站点生成等几乎所有构建步骤。</p>
+<p>Maven对项目构建的生命周期划分为3套（相互独立）：</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20220616124015567.png"></p>
+<ul>
+<li><p>clean：清理工作。</p>
+</li>
+<li><p>default：核心工作。如：编译、测试、打包、安装、部署等。</p>
+</li>
+<li><p>site：生成报告、发布站点等。</p>
+</li>
+</ul>
+<p>三套生命周期又包含哪些具体的阶段呢, 我们来看下面这幅图:</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20220616124348972.png" alt="image-20220616124348972"> </p>
+<p>我们看到这三套生命周期，里面有很多很多的阶段，这么多生命周期阶段，其实我们常用的并不多，主要关注以下几个：</p>
+<p>• clean：移除上一次构建生成的文件</p>
+<p>• compile：编译项目源代码</p>
+<p>• test：使用合适的单元测试框架运行测试(junit)</p>
+<p>• package：将编译后的文件打包，如：jar、war等</p>
+<p>• install：安装项目到本地仓库</p>
+<p>Maven的生命周期是抽象的，这意味着生命周期本身不做任何实际工作。<strong>在Maven的设计中，实际任务（如源代码编译）都交由插件来完成。</strong></p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221130142100703.png" alt="image-20221130142100703"></p>
+<p>IDEA工具为了方便程序员使用maven生命周期，在右侧的maven工具栏中，已给出快速访问通道</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201151340340.png" alt="image-20221201151340340"></p>
+<p>生命周期的顺序是：clean –&gt; validate –&gt; compile –&gt; test –&gt; package –&gt; verify –&gt; install –&gt; site –&gt; deploy </p>
+<p>我们需要关注的就是：clean –&gt;  compile –&gt; test –&gt; package  –&gt; install </p>
+<blockquote>
+<p>说明：在同一套生命周期中，我们在执行后面的生命周期时，前面的生命周期都会执行。</p>
+</blockquote>
+<blockquote>
+<p> 思考：当运行package生命周期时，clean、compile生命周期会不会运行？</p>
+<p> ​		clean不会运行，compile会运行。  因为compile与package属于同一套生命周期，而clean与package不属于同一套生命周期。</p>
+</blockquote>
+<h4 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h4><p>在日常开发中，当我们要执行指定的生命周期时，有两种执行方式：</p>
+<ol>
+<li>在idea工具右侧的maven工具栏中，选择对应的生命周期，双击执行</li>
+<li>在DOS命令行中，通过maven命令执行</li>
+</ol>
+<p><strong>方式一：在idea中执行生命周期</strong></p>
+<ul>
+<li>选择对应的生命周期，双击执行</li>
+</ul>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201161957301.png" alt="image-20221201161957301"> </p>
+<p>compile：</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201163711835.png" alt="image-20221201163711835"></p>
+<p>test：</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201164627403.png" alt="image-20221201164627403"></p>
+<p>package：</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201165801341.png" alt="image-20221201165801341"></p>
+<p>install：</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201170830837.png" alt="image-20221201170830837"></p>
+<p>clean：</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201171529382.png" alt="image-20221201171529382"></p>
+<p>在命令行中执行生命周期**</p>
+<ol>
+<li>进入到DOS命令行</li>
+</ol>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201172210253.png" alt="image-20221201172210253"></p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221201172914648.png" alt="image-20221201172914648"> </p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="更新依赖索引"><a href="#更新依赖索引" class="headerlink" title="更新依赖索引"></a>更新依赖索引</h3><p>有时候给idea配置完maven仓库信息后，在idea中依然搜索不到仓库中的jar包。这是因为仓库中的jar包索引尚未更新到idea中。这个时候我们就需要更新idea中maven的索引了，具体做法如下：</p>
+<p> 打开设置—-搜索maven—-Repositories—-选中本地仓库—–点击Update</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221537786634456-1582625518984.png" alt="1537786634456"></p>
+<h3 id="清理maven仓库"><a href="#清理maven仓库" class="headerlink" title="清理maven仓库"></a>清理maven仓库</h3><p>初始情况下，我们的本地仓库是没有任何jar包的，此时会从私服去下载（如果没有配置，就直接从中央仓库去下载），可能由于网络的原因，jar包下载不完全，这些不完整的jar包都是以lastUpdated结尾。此时，maven不会再重新帮你下载，需要你删除这些以lastUpdated结尾的文件，然后maven才会再次自动下载这些jar包。</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22lastUpdated-1582625518983.png" alt="lastUpdate"></p>
+<p>如果本地仓库中有很多这样的以lastUpadted结尾的文件，可以定义一个批处理文件，在其中编写如下脚本来删除： </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">set REPOSITORY_PATH=E:\develop\apache-maven-3.6.1\mvn_repo</span><br><span class="line">rem 正在搜索...</span><br><span class="line"></span><br><span class="line">del /s /q %REPOSITORY_PATH%\*.lastUpdated</span><br><span class="line"></span><br><span class="line">rem 搜索完毕</span><br><span class="line">pause</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Maven/">Maven</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2019/01/01/VSCode%E6%97%A0%E6%B3%95%E9%A2%84%E8%A7%88MarkDown%E5%9B%BE%E7%89%87%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" title="VSCode无法预览MarkDown图片的解决办法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">VSCode无法预览MarkDown图片的解决办法</div></div></a></div><div class="next-post pull-right"><a href="/2018/03/19/02_%E5%88%97%E8%A1%A8%E6%A0%87%E7%AD%BE%EF%BC%8C%E8%A1%A8%E6%A0%BC%EF%BC%8C%E6%8C%89%E9%92%AE%E7%AD%89%E6%A0%87%E7%AD%BE/" title="02_列表标签，表格，按钮等标签"><img class="cover" src="http://rqrlo080w.hb-bkt.clouddn.com//image-20230304161228919.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">02_列表标签，表格，按钮等标签</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2018/03/16/1.%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8Maven/" title="为什么使用Maven"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22maven.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-03-16</div><div class="title">为什么使用Maven</div></div></a></div><div><a href="/2018/03/18/2.Maven%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E5%9C%A8IDEA%E7%9A%84%E9%9B%86%E6%88%90/" title="Maven的安装和在IDEA的集成"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221130142100703.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-03-18</div><div class="title">Maven的安装和在IDEA的集成</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avator.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">然后</div><div class="author-info__description">记录一下，防止遗忘</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">48</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">依赖管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.</span> <span class="toc-text">依赖配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="toc-number">1.1.1.</span> <span class="toc-text">添加依赖的几种方式：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E4%BC%A0%E9%80%92"><span class="toc-number">1.2.</span> <span class="toc-text">依赖传递</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E5%85%B7%E6%9C%89%E4%BC%A0%E9%80%92%E6%80%A7"><span class="toc-number">1.2.1.</span> <span class="toc-text">依赖具有传递性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%92%E9%99%A4%E4%BE%9D%E8%B5%96"><span class="toc-number">1.2.2.</span> <span class="toc-text">排除依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E8%8C%83%E5%9B%B4"><span class="toc-number">1.2.3.</span> <span class="toc-text">依赖范围</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">1.2.4.</span> <span class="toc-text">生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.2.4.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C"><span class="toc-number">1.2.4.2.</span> <span class="toc-text">执行</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%84%E5%BD%95"><span class="toc-number">1.3.</span> <span class="toc-text">附录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E4%BE%9D%E8%B5%96%E7%B4%A2%E5%BC%95"><span class="toc-number">1.3.1.</span> <span class="toc-text">更新依赖索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%85%E7%90%86maven%E4%BB%93%E5%BA%93"><span class="toc-number">1.3.2.</span> <span class="toc-text">清理maven仓库</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/09/16/MySQL%E5%B8%B8%E8%A7%81%E7%9A%84%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E6%83%85%E5%86%B5/" title="MySQL常见的索引失效的情况"><img src="https://springboot-practice-crud.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231016094025401.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MySQL常见的索引失效的情况"/></a><div class="content"><a class="title" href="/2023/09/16/MySQL%E5%B8%B8%E8%A7%81%E7%9A%84%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E6%83%85%E5%86%B5/" title="MySQL常见的索引失效的情况">MySQL常见的索引失效的情况</a><time datetime="2023-09-16T00:00:00.000Z" title="发表于 2023-09-16 08:00:00">2023-09-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/20/7.%E5%9F%BA%E4%BA%8ECentOS7Redis%E9%9B%86%E7%BE%A4%E7%9A%84%E6%90%AD%E5%BB%BA%EF%BC%9A%E4%B8%BB%E4%BB%8E%E9%9B%86%E7%BE%A4%EF%BC%8C%E5%93%A8%E5%85%B5%E9%9B%86%E7%BE%A4%EF%BC%8C%E5%88%86%E7%89%87%E9%9B%86%E7%BE%A4/" title="基于CentOS7的Redis集群的搭建：主从集群，哨兵集群，分片集群"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210630111505799.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于CentOS7的Redis集群的搭建：主从集群，哨兵集群，分片集群"/></a><div class="content"><a class="title" href="/2023/08/20/7.%E5%9F%BA%E4%BA%8ECentOS7Redis%E9%9B%86%E7%BE%A4%E7%9A%84%E6%90%AD%E5%BB%BA%EF%BC%9A%E4%B8%BB%E4%BB%8E%E9%9B%86%E7%BE%A4%EF%BC%8C%E5%93%A8%E5%85%B5%E9%9B%86%E7%BE%A4%EF%BC%8C%E5%88%86%E7%89%87%E9%9B%86%E7%BE%A4/" title="基于CentOS7的Redis集群的搭建：主从集群，哨兵集群，分片集群">基于CentOS7的Redis集群的搭建：主从集群，哨兵集群，分片集群</a><time datetime="2023-08-20T00:00:00.000Z" title="发表于 2023-08-20 08:00:00">2023-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/26/6.Redis%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96/" title="Redis的持久化"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210725151319695.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Redis的持久化"/></a><div class="content"><a class="title" href="/2023/07/26/6.Redis%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96/" title="Redis的持久化">Redis的持久化</a><time datetime="2023-07-26T00:00:00.000Z" title="发表于 2023-07-26 08:00:00">2023-07-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/24/5.Redis%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="Redis双写一致性的解决方案"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231022193122380.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Redis双写一致性的解决方案"/></a><div class="content"><a class="title" href="/2023/07/24/5.Redis%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="Redis双写一致性的解决方案">Redis双写一致性的解决方案</a><time datetime="2023-07-24T00:00:00.000Z" title="发表于 2023-07-24 08:00:00">2023-07-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/22/4.Redis%E7%9A%84%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%EF%BC%8C%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%EF%BC%8C%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="Redis的缓存穿透，缓存击穿，缓存雪崩的解决方案"><img src="https://springboot-practice-crud.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20230824150650572.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Redis的缓存穿透，缓存击穿，缓存雪崩的解决方案"/></a><div class="content"><a class="title" href="/2023/07/22/4.Redis%E7%9A%84%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%EF%BC%8C%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%EF%BC%8C%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="Redis的缓存穿透，缓存击穿，缓存雪崩的解决方案">Redis的缓存穿透，缓存击穿，缓存雪崩的解决方案</a><time datetime="2023-07-22T00:00:00.000Z" title="发表于 2023-07-22 08:00:00">2023-07-22</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2016 - 2023 By 然后</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container').forEach(node => {
+            if (node.hasAttribute('display')) {
+              btf.wrap(node, 'div', { class: 'mathjax-overflow' })
+            } else {
+              btf.wrap(node, 'span', { class: 'mathjax-overflow' })
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
