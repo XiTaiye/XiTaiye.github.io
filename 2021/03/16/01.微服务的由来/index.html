@@ -1,0 +1,314 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>微服务的演变过程 | 然后的学习笔记</title><meta name="author" content="然后"><meta name="copyright" content="然后"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="微服务的演变过程首先作为微服务，它这个名词是怎么来的呢？其实早在2011年的5月份，在威尼斯附近的一个软件架构师的研讨会上，微服务(Micro Service)的概念就被人提起了。当时的参会者对它的描述只是一种通用的软件架构设计的风格，但是并没有给出明确的定义是什么。之后随着技术的不断的发展，在2014年的3月份，由詹姆斯.里维斯以及他的伙伴马丁弗勒在他的微博中发表了一篇有关于微服务的特点的文章，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务的演变过程">
+<meta property="og:url" content="http://xitaiye.github.io.git/2021/03/16/01.%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%9A%84%E7%94%B1%E6%9D%A5/index.html">
+<meta property="og:site_name" content="然后的学习笔记">
+<meta property="og:description" content="微服务的演变过程首先作为微服务，它这个名词是怎么来的呢？其实早在2011年的5月份，在威尼斯附近的一个软件架构师的研讨会上，微服务(Micro Service)的概念就被人提起了。当时的参会者对它的描述只是一种通用的软件架构设计的风格，但是并没有给出明确的定义是什么。之后随着技术的不断的发展，在2014年的3月份，由詹姆斯.里维斯以及他的伙伴马丁弗勒在他的微博中发表了一篇有关于微服务的特点的文章，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221663671992709-5aae2371-1b58-4695-b1dd-08d06258dc1a.png">
+<meta property="article:published_time" content="2021-03-16T00:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-16T00:00:00.000Z">
+<meta property="article:author" content="然后">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221663671992709-5aae2371-1b58-4695-b1dd-08d06258dc1a.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://xitaiye.github.io.git/2021/03/16/01.%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%9A%84%E7%94%B1%E6%9D%A5/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '微服务的演变过程',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-03-16 08:00:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avator.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">71</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22datastructure.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="然后的学习笔记"><img class="site-icon" src="/img/logo.png"/><span class="site-name">然后的学习笔记</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">微服务的演变过程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-03-16T00:00:00.000Z" title="发表于 2021-03-16 08:00:00">2021-03-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-03-16T00:00:00.000Z" title="更新于 2021-03-16 08:00:00">2021-03-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="微服务的演变过程"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="微服务的演变过程"><a href="#微服务的演变过程" class="headerlink" title="微服务的演变过程"></a>微服务的演变过程</h1><p>首先作为微服务，它这个名词是怎么来的呢？其实早在2011年的5月份，在威尼斯附近的一个软件架构师的研讨会上，微服务(Micro Service)的概念就被人提起了。当时的参会者对它的描述只是一种通用的软件架构设计的风格，但是并没有给出明确的定义是什么。之后随着技术的不断的发展，在2014年的3月份，由詹姆斯.里维斯以及他的伙伴马丁弗勒在他的微博中发表了一篇有关于微服务的特点的文章，对微服务进行了全面的阐述，从这以后微服务就走进了我们的视野.</p>
+<p>咱们来看一下关于微服务的描述:</p>
+<p><a target="_blank" rel="noopener" href="https://martinfowler.com/articles/microservices.html">https://martinfowler.com/articles/microservices.html</a></p>
+<p><strong>所谓微服务架构</strong>风格是一种将单个应用程序开发为一组小型服务的方法，每个小服务运行在自己的进程中，并以轻量级的机制(通常是HTTP RESTful API)的方式进行通信，这些服务围绕着业务能力所建立的，并且可以由完全自动化的部署机构独立部署(Docker &amp; Kubernetes k8s)，这些服务的集中管理只有最低限度，可以用不同的编程语言编写并使用不同的数据库存储技术</p>
+<p>以上是詹姆斯对微服务的描述,我不喜欢咬文嚼字,但还是觉得太过笼统. 下面我就结合自己的过往经验为你诠释微服务解决了哪些问题.</p>
+<h2 id="微服务帮我们解决了什么问题"><a href="#微服务帮我们解决了什么问题" class="headerlink" title="微服务帮我们解决了什么问题?"></a>微服务帮我们解决了什么问题?</h2><p>任何架构都不是一蹴而就的,每一种架构风格都是为了解决以往遗留问题而诞生的,要弄清微服务架构,还得从架构的演化过程说起:</p>
+<h2 id="架构演化过程"><a href="#架构演化过程" class="headerlink" title="架构演化过程"></a>架构演化过程</h2><h2 id="单体应用"><a href="#单体应用" class="headerlink" title="单体应用"></a>单体应用</h2><p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221666141737029-bb176c4c-c1a8-437e-b679-0b484ad10a0a.jpeg" alt="img"></p>
+<h2 id="集群架构"><a href="#集群架构" class="headerlink" title="集群架构"></a><strong>集群架构</strong></h2><p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221666141907586-026005d3-77a7-4667-8459-4c18cc7e8f74.jpeg" alt="img"></p>
+<p><strong>服务化架构</strong></p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221668518783829-a072e4c2-ee46-444c-93f3-d2173f73e007.jpeg" alt="img"></p>
+<h2 id="野蛮生长时代"><a href="#野蛮生长时代" class="headerlink" title="野蛮生长时代"></a><strong>野蛮生长时代</strong></h2><p>一家公司的成长过程,往往也是IT系统建设发展的过程.通过数字化支撑公司的运营与决策,但由于早期研发投入力度不足,或者人员能力有限等因素,公司会根据业务线或者职能切分若干子系统来满足现实中的需求.以我在某国内著名金融服务机构业务流程为例:</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221663671991724-e138a745-ef35-403b-9dcc-787731b5111f.png" alt="img"></p>
+<p>简化后业务流程是:</p>
+<ol>
+<li>借款人门户网站收集借款人需求</li>
+<li>信审&amp;风控团队进行评估审核</li>
+<li>信审评估审核后将订单送往贷后系统</li>
+<li>分期还款的用户会收到来自催收系统的短信通知</li>
+<li>催收系统 如遇不守信用户会上报信审系统登记</li>
+</ol>
+<p>在实施过程中,刚开始运行良好,但后期随着每天几万笔订单在上午十点到十二点左右频繁涌入,发现了新的问题:</p>
+<ol>
+<li>系统间通信困难:以信审与贷后系统为例,采用webservice方式通信,当贷后系统也就是服务提供者接口发生变化,信审系统必须同步更新,否则就会出错</li>
+</ol>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221663726729548-b9403d6d-707b-44ce-a925-d2a00c13d880.jpeg" alt="img"></p>
+<ol start="2">
+<li>系统内部复杂度对外暴露: 我们都知道为了保证系统的稳定性,通常会额外部署一组或多组设备作为高可用冗余.下图所示,信审系统依赖贷后系统,在信审系统中配置了77.10与11两台贷后服务器的IP,但此时如果贷后进行扩容增加了77.12与13两台服务器,因为信审与贷后是两个不同团队在维护,信审配置时必须询问贷后团队新的服务器IP是多少再进行配置,这显然大幅度增加了两个团队间的工作耦合,同时贷后将自己系统的底层细节暴露给信审团队也是不合理的.</li>
+</ol>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221663671992433-1f09dad4-cf63-405c-9ced-2f8318ab6310.png" alt="img"></p>
+<ol start="3">
+<li>系统间通信的逻辑复杂: 因为没有规定统一的系统间通信标准, 导致应用间有的使用RPC,有的使用RESTful,还有的使用WebService,在长期系统积累后,必将导致下图所示的”蛛网”通信,到时想梳理清楚系统之间的调用关系简直难于上青天</li>
+</ol>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221663671992709-5aae2371-1b58-4695-b1dd-08d06258dc1a.png" alt="img"></p>
+<ol start="4">
+<li>系统的重复建设: 因为通常每个子系统都有独立团队进行维护, 在没有事先协调的情况下,这里会浪费大量的人力物力进行重复建设. 比如:</li>
+</ol>
+<ul>
+<li>每个系统都要包含用户认证与权限控制</li>
+<li>对外暴露系统时,黑名单&#x2F;白名单的设计</li>
+<li>流量控制与系统异常的处理</li>
+<li>系统参数的配置管理</li>
+</ul>
+<p>如果能把这些抽象出通用的模块,那就太好了.</p>
+<ol start="5">
+<li>“大一统”的架构设计: 很多公司的架构师特别喜欢采用”大一统”的架构设计,期望一套架构可以满足所有应用的需求,在我看着这是不可行的.</li>
+</ol>
+<p>来我们举个例子:在业务架构图中,原有设计所有的数据读写都依赖Oracle集群.虽然Oracle集群性能极为强大,但也有短板,比如”借款人门户网站”系统会进行大量的全文检索,在海量的文本数据库发现用户的关键信息,这是Oracle本身很难做到的.如果你对架构稍有研究,自然会想到引入诸如Elasticsearch这样的全文检索引擎实现这个任务,在运行时从关系型数据库同步到ES索引.此时系统架构就会变成下图这样</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221663671993153-d8520195-00ef-4b14-8496-f32e8be17170.png" alt="img"></p>
+<p>之后技术部划拨给借款人门户网站一组ES集群,因为是只有借款人门户在用,当然由它的团队负责维护.</p>
+<p>可是新的问题又产生了,没过多久信审也需要使用ES全文检索特性,这时便产生两难问题:</p>
+<p>是重新向部门申请一组新的ES集群,还是与原有ES集群混用?</p>
+<p>如果是新申请恐怕没有预算</p>
+<p>如果是混用那ES集群的最终管理权归谁呢,弄不好两个团队就开撕了</p>
+<p>以上只是”大一统”架构设计的一个缩影,类似的问题还有很多.那怎么解决这些问题呢? 这些年如火如荼的”微服务架构” 便可以帮我们良好解决这类问题</p>
+<h2 id="微服务架构时代"><a href="#微服务架构时代" class="headerlink" title="微服务架构时代"></a><strong>微服务架构时代</strong></h2><p>首先做微服务架构的小总结,它有主要三方面特点:</p>
+<p>可独立运行的、可重用的、职责明确的小型服务</p>
+<p>统一的通信标准,轻量级的通信协议(通常是RESTful)</p>
+<p>可独立运行,拥有独立的的存储,由独立团队维护</p>
+<p>如果按原有的业务流程服务化改造后,会变成下图所示:</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221663671993531-b333faaa-31f0-434e-80f3-17c8b5ad006b.png" alt="img"></p>
+<p>可以看到我们将应用中关键的业务逻辑从原有的应用中剥离出来,形成新的服务层,而新的服务层由可以按与业务是否有关拆分为:</p>
+<p>业务服务层</p>
+<p>业务服务层是指将原有与业务相关的服务逻辑代码抽象出来,剥离称为新的微服务应用</p>
+<p>这些微服务本身在拆分后职责的边界非常清晰,且拥有<strong>独立的数据存储</strong>和<strong>维护的团队</strong></p>
+<p>这些服务每一个都是以<strong>进程</strong>的形式独立运行的,在启动时并不要求上下游服务必须启动运行.</p>
+<p>服务间通信也是默认采用统一形式(RESTful)形式进行的</p>
+<p>业务服务拆分后最好是可被重用的,例如:信审风控服务在剥离后不但可以为”借款人门户”提供服务，还可以为自家的“XX贷产品”、“XX宝产品”甚至第三方对外提供商用服务。</p>
+<p>基础服务层</p>
+<p>基础服务层是应用的基础设施,它的设计与业务是无关的,是面向所有服务开放的.</p>
+<p>以文件存储服务为例,业务服务无需知道文件实际存储的方式或底层实现,只需要知道文件存储服务要求提供的接口规范,通过RESTful的方式便可实现文件的高性能读写.</p>
+<p>那说到这,咱们回看刚才遇到的五个分布式应用难题是通过微服务架构如何解决的:</p>
+<p>系统间通信困难</p>
+<p>原有系统因为设计时没有明确规范,导致服务通信时因为版本更迭导致线上产生BUG,所以维斯与马丁福勒优先推荐RESTful风格的API接口,因为RESTful接口采用标准的HTTP协议,它很灵活,并不要求像WebService&#x2F;RPC必须提供一致的客户端对象,因此在很大程度上保证了接口的灵活性.</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221663726417856-be84215b-ef57-44bc-a372-3eb985818a22.jpeg" alt="img"></p>
+<ol start="2">
+<li>系统内部复杂度对外暴露</li>
+</ol>
+<p>原始版本下,我们采用客户端持有静态表的方式实现客户端负载均衡,但因为缺少动态服务发现的机制,导致有新节点加入后必须手动维护客户端的静态表并重启应用.</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221663671994193-c1b11025-4c07-4b57-921b-796f10373e2f.png" alt="img"></p>
+<p>在微服务的架构下引入了”注册中心”这一组件,典型代表为Netflix Eureka与Alibaba Nacos,这些组件的用途是可进行动态服务治理与可用性检查.请看下图执行流程如下:</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221663671994590-ec5c0b2b-b7cc-413b-a86b-84366367690d.png" alt="img"></p>
+<ol>
+<li>信审服务启动向注册中心在注册中心中登记IP与运行状况</li>
+<li>贷后服务若干集群节点启动时向注册中心发送请求登记其IP及运行状况</li>
+<li>信审服务在向贷后发起请求前,先从注册中心获取”贷后服务”的可用节点IP列表</li>
+<li>信审服务根据负载均衡策略选择一个合适的IP节点(如77.13)发起实际的HTTP请求</li>
+</ol>
+<p>TIPS: 注册中心通过心跳机制定时检测每一个服务节点的状态,如遇无响应节点则从可用节点中摘除,从而保证服务节点的有效性.</p>
+<ol start="3">
+<li>系统间通信的逻辑复杂</li>
+</ol>
+<p>在大型系统”化整为零”后,必然会出现”蛛网”问题,好在微服务治理体系中有”链路追踪”这一概念.链路最终实施通过日志打标等手段,收集到消息在服务间传递的走向,再通过链路追踪服务生成”链路跟踪图”,从而帮我们清晰的梳理出程序的走向与各个服务间的执行状态.</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221663671994956-6541ab59-b1b5-4f23-bcd4-65fcc34fed45.png" alt="img"></p>
+<p>在梳理出模块间调用后,我们可以有针对性的对服务进行合并来减少调用的层次.</p>
+<ol start="4">
+<li>系统的重复建设</li>
+</ol>
+<p>在前面提到,之前在不同系统由不同团队维护,每一个子系统可能都要自己维护一套”用户认证授权”与”规则检查”的组件,对于这类重复建设就可以抽象出”用户认证中心服务”,每个团队通过调用接口便可轻松完成用户的认证与授权,同时由于所有用户的数据都集中到了”用户认证服务”上,这也更容易管理数据.减少由于分布式带来的数据一致性问题</p>
+<ol start="5">
+<li>“大一统”的架构设计</li>
+</ol>
+<p>“大一统”架构设计在架构设计领域已经被证实是笨重而缺少弹性的设计方案,那在应用越来越轻量化的时代,微服务架构提供了更具弹性的设计,以搜索场景为例,在早期上线之初确实可以根据业务需求在业务服务中增加全文检索,并不需要过分未雨绸缪的来提前设计全文检索服务. </p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221663671995209-bf17f07c-a443-42ae-9d1b-5e3447827425.png" alt="img"></p>
+<p>但是随着数据量增大,复杂查询场景逐渐增加,越来越多的服务对全文检索有需求,这时平台架构组可以号召高程们针对现有查询场景抽象出一套通用的全文检索服务,通过这个服务屏蔽掉现有业务的搜索复杂性,而因为前期各团队都遵循的相同的标准进行服务开发,所以搜索场景的升级并不是一件难事.</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221663671995634-91246c7f-a2c7-45c3-8fea-dc07a4cf6418.png" alt="img"></p>
+<p>在这个过程你是否发现,无论是业务服务还是基础服务,都在强调通用性.对于服务构建者来说首先他应是对业务场景了如指掌的人,同时也需要具备一定的软件工程思维,擅于抽象出不同业务场景下的通用部分形成服务. 如果只是把原有系统中的Service代码复制粘贴到新的服务模块中,本身就违背了微服务的初衷.</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/03/17/02.Eureka%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/" title="Eureka注册中心：服务的注册和发现"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210713220104956.png" onerror="onerror=null;src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Eureka注册中心：服务的注册和发现</div></div></a></div><div class="next-post pull-right"><a href="/2021/01/16/MySQL%E7%9A%84%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" title="MySQL的存储引擎"><img class="cover" src="https://springboot-practice-crud.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231015225828770.png" onerror="onerror=null;src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">MySQL的存储引擎</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avator.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">然后</div><div class="author-info__description">记录一下，防止遗忘</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">71</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%BC%94%E5%8F%98%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">微服务的演变过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%B8%AE%E6%88%91%E4%BB%AC%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text">微服务帮我们解决了什么问题?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E6%BC%94%E5%8C%96%E8%BF%87%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">架构演化过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BD%93%E5%BA%94%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">单体应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84"><span class="toc-number">1.4.</span> <span class="toc-text">集群架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8E%E8%9B%AE%E7%94%9F%E9%95%BF%E6%97%B6%E4%BB%A3"><span class="toc-number">1.5.</span> <span class="toc-text">野蛮生长时代</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E6%97%B6%E4%BB%A3"><span class="toc-number">1.6.</span> <span class="toc-text">微服务架构时代</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/11/01/9.Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-intset/" title="Redis数据结构-intset"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221653985304075.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="Redis数据结构-intset"/></a><div class="content"><a class="title" href="/2023/11/01/9.Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-intset/" title="Redis数据结构-intset">Redis数据结构-intset</a><time datetime="2023-11-01T00:00:00.000Z" title="发表于 2023-11-01 08:00:00">2023-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/05/03.Ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" title="Ribbon负载均衡原理和源码分析"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221525620787090.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="Ribbon负载均衡原理和源码分析"/></a><div class="content"><a class="title" href="/2023/10/05/03.Ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" title="Ribbon负载均衡原理和源码分析">Ribbon负载均衡原理和源码分析</a><time datetime="2023-10-05T00:00:00.000Z" title="发表于 2023-10-05 08:00:00">2023-10-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/01/8.SDS-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2/" title="简单动态字符串（Simple Dynamic String）"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221653984624671.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="简单动态字符串（Simple Dynamic String）"/></a><div class="content"><a class="title" href="/2023/10/01/8.SDS-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2/" title="简单动态字符串（Simple Dynamic String）">简单动态字符串（Simple Dynamic String）</a><time datetime="2023-10-01T00:00:00.000Z" title="发表于 2023-10-01 08:00:00">2023-10-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/30/06.MySQL%E7%9A%844%E7%A7%8D%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6/" title="MySQL中的4种日志"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231101135518134.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="MySQL中的4种日志"/></a><div class="content"><a class="title" href="/2023/09/30/06.MySQL%E7%9A%844%E7%A7%8D%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6/" title="MySQL中的4种日志">MySQL中的4种日志</a><time datetime="2023-09-30T00:00:00.000Z" title="发表于 2023-09-30 08:00:00">2023-09-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/16/MySQL%E5%B8%B8%E8%A7%81%E7%9A%84%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E6%83%85%E5%86%B5/" title="MySQL常见的索引失效的情况"><img src="https://springboot-practice-crud.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231016094025401.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="MySQL常见的索引失效的情况"/></a><div class="content"><a class="title" href="/2023/09/16/MySQL%E5%B8%B8%E8%A7%81%E7%9A%84%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E6%83%85%E5%86%B5/" title="MySQL常见的索引失效的情况">MySQL常见的索引失效的情况</a><time datetime="2023-09-16T00:00:00.000Z" title="发表于 2023-09-16 08:00:00">2023-09-16</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2016 - 2023 By 然后</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container').forEach(node => {
+            if (node.hasAttribute('display')) {
+              btf.wrap(node, 'div', { class: 'mathjax-overflow' })
+            } else {
+              btf.wrap(node, 'span', { class: 'mathjax-overflow' })
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

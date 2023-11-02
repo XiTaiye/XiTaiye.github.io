@@ -1,0 +1,249 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>Redis数据结构-intset | 然后的学习笔记</title><meta name="author" content="然后"><meta name="copyright" content="然后"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Redis数据结构-intsetIntSet是Redis中Set集合的一种实现方式，基于整数数组来实现，并且具备长度可变、有序等特征。 ChatGPT对intset的解释 Redis中的intset数据结构是一种用于存储整数集合的紧凑有序数组。它只支持单个整数值的插入、删除和查找操作，但不支持多个值的批量操作。 intset数据结构使用一块连续的内存空间来存储整数值，每个整数值占用8个字节（64位">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis数据结构-intset">
+<meta property="og:url" content="http://xitaiye.github.io.git/2023/11/01/9.Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-intset/index.html">
+<meta property="og:site_name" content="然后的学习笔记">
+<meta property="og:description" content="Redis数据结构-intsetIntSet是Redis中Set集合的一种实现方式，基于整数数组来实现，并且具备长度可变、有序等特征。 ChatGPT对intset的解释 Redis中的intset数据结构是一种用于存储整数集合的紧凑有序数组。它只支持单个整数值的插入、删除和查找操作，但不支持多个值的批量操作。 intset数据结构使用一块连续的内存空间来存储整数值，每个整数值占用8个字节（64位">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221653985304075.png">
+<meta property="article:published_time" content="2023-11-01T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-11-01T00:00:00.000Z">
+<meta property="article:author" content="然后">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221653985304075.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://xitaiye.github.io.git/2023/11/01/9.Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-intset/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Redis数据结构-intset',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-11-01 08:00:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avator.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">71</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22snow.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="然后的学习笔记"><img class="site-icon" src="/img/logo.png"/><span class="site-name">然后的学习笔记</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Redis数据结构-intset</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-11-01T00:00:00.000Z" title="发表于 2023-11-01 08:00:00">2023-11-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-11-01T00:00:00.000Z" title="更新于 2023-11-01 08:00:00">2023-11-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Redis/">Redis</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Redis数据结构-intset"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Redis数据结构-intset"><a href="#Redis数据结构-intset" class="headerlink" title="Redis数据结构-intset"></a>Redis数据结构-intset</h1><p>IntSet是Redis中Set集合的一种实现方式，基于整数数组来实现，并且具备长度可变、有序等特征。</p>
+<h2 id="ChatGPT对intset的解释"><a href="#ChatGPT对intset的解释" class="headerlink" title="ChatGPT对intset的解释"></a>ChatGPT对intset的解释</h2><blockquote>
+<p>Redis中的intset数据结构是一种用于存储整数集合的紧凑有序数组。它只支持单个整数值的插入、删除和查找操作，但不支持多个值的批量操作。</p>
+<p>intset数据结构使用一块连续的内存空间来存储整数值，每个整数值占用8个字节（64位）。在内存中，这些整数值按照从小到大的顺序排列，相邻整数值之间没有空隙。这使得intset数据结构在存储大量整数时非常节省空间。</p>
+<p>intset数据结构的主要优点如下：</p>
+<ol>
+<li>节省空间：由于整数值是紧凑存储的，所以intset数据结构在存储大量整数时非常节省空间。</li>
+<li>高效查询：由于整数值是有序存储的，所以可以使用二分查找算法快速查询某个整数值是否存在于集合中。</li>
+<li>时间复杂度低：插入、删除和查找操作的时间复杂度都是O(log n)，其中n是集合中整数的数量。</li>
+</ol>
+<p>然而，intset数据结构也有一些限制：</p>
+<ol>
+<li>不支持多个值的批量操作：intset数据结构只支持单个整数值的插入、删除和查找操作，不支持多个值的批量操作。如果需要处理多个整数值，可以考虑使用其他数据结构，如hash或zset。</li>
+<li>不支持范围查询：由于intset数据结构是有序的，所以无法直接进行范围查询。如果需要查询某个范围内的整数值，可以先将范围划分为多个子范围，然后分别进行查询。</li>
+</ol>
+</blockquote>
+<h2 id="具体数据结构"><a href="#具体数据结构" class="headerlink" title="具体数据结构"></a>具体数据结构</h2><p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221653984923322.png" alt="1653984923322"></p>
+<p>其中的encoding包含三种模式，表示存储的整数大小不同：</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221653984942385.png" alt="1653984942385"></p>
+<p>为了方便查找，Redis会将intset中所有的整数按照升序依次保存在contents数组中，结构如图：</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221653985149557.png" alt="1653985149557"></p>
+<p>现在，数组中每个数字都在int16_t的范围内，因此采用的编码方式是INTSET_ENC_INT16，每部分占用的字节大小为：<br>encoding：4字节<br>length：4字节<br>contents：2字节 * 3  &#x3D; 6字节</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221653985197214.png" alt="1653985197214"></p>
+<h2 id="添加和扩容规则"><a href="#添加和扩容规则" class="headerlink" title="添加和扩容规则"></a>添加和扩容规则</h2><p>我们向该其中添加一个数字：50000，这个数字超出了int16_t的范围，intset会自动升级编码方式到合适的大小。<br>以当前案例来说流程如下：</p>
+<ul>
+<li>升级编码为INTSET_ENC_INT32, 每个整数占4字节，并按照新的编码方式及元素个数扩容数组</li>
+<li>倒序依次将数组中的元素拷贝到扩容后的正确位置</li>
+<li>将待添加的元素放入数组末尾</li>
+<li>最后，将inset的encoding属性改为INTSET_ENC_INT32，将length属性改为4</li>
+</ul>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221653985276621.png" alt="1653985276621"></p>
+<p>源码如下：</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221653985304075.png" alt="1653985304075"></p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221653985327653.png" alt="1653985327653"></p>
+<p>小总结：</p>
+<p>Intset可以看做是特殊的整数数组，具备一些特点：</p>
+<ul>
+<li>Redis会确保Intset中的元素唯一、有序</li>
+<li>具备类型升级机制，可以节省内存空间</li>
+<li>底层采用二分查找方式来查询</li>
+</ul>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Redis/">Redis</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/10/05/03.Ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" title="Ribbon负载均衡原理和源码分析"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221525620787090.png" onerror="onerror=null;src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Ribbon负载均衡原理和源码分析</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/07/16/1.%20Redis%E7%9A%84%E5%B8%B8%E8%A7%81%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%E5%92%8C%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%EF%BC%9F/" title="Redis的常见使用场景和常见问题？"><img class="cover" src="https://springboot-practice-crud.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20230716114816327.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-16</div><div class="title">Redis的常见使用场景和常见问题？</div></div></a></div><div><a href="/2023/07/15/1.Redis%E7%9A%84%E5%AE%89%E8%A3%85/" title="Redis安装：windows和linux"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231031230212189.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-15</div><div class="title">Redis安装：windows和linux</div></div></a></div><div><a href="/2023/07/18/2.Redis%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%91%BD%E4%BB%A4/" title="Redis各种数据类型的常用命令"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20221130190150749.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-18</div><div class="title">Redis各种数据类型的常用命令</div></div></a></div><div><a href="/2023/07/20/3.Spring%20Data%20Redis%E5%85%A5%E9%97%A8/" title="Spring Data Redis入门"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210927143741458.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-20</div><div class="title">Spring Data Redis入门</div></div></a></div><div><a href="/2023/07/22/4.Redis%E7%9A%84%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%EF%BC%8C%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%EF%BC%8C%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="Redis的缓存穿透，缓存击穿，缓存雪崩的解决方案"><img class="cover" src="https://springboot-practice-crud.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20230824150650572.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-22</div><div class="title">Redis的缓存穿透，缓存击穿，缓存雪崩的解决方案</div></div></a></div><div><a href="/2023/07/24/5.Redis%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="Redis双写一致性的解决方案"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231022193122380.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-24</div><div class="title">Redis双写一致性的解决方案</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avator.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">然后</div><div class="author-info__description">记录一下，防止遗忘</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">71</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-intset"><span class="toc-number">1.</span> <span class="toc-text">Redis数据结构-intset</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ChatGPT%E5%AF%B9intset%E7%9A%84%E8%A7%A3%E9%87%8A"><span class="toc-number">1.1.</span> <span class="toc-text">ChatGPT对intset的解释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">具体数据结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%92%8C%E6%89%A9%E5%AE%B9%E8%A7%84%E5%88%99"><span class="toc-number">1.3.</span> <span class="toc-text">添加和扩容规则</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/11/01/9.Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-intset/" title="Redis数据结构-intset"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221653985304075.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="Redis数据结构-intset"/></a><div class="content"><a class="title" href="/2023/11/01/9.Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-intset/" title="Redis数据结构-intset">Redis数据结构-intset</a><time datetime="2023-11-01T00:00:00.000Z" title="发表于 2023-11-01 08:00:00">2023-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/05/03.Ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" title="Ribbon负载均衡原理和源码分析"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221525620787090.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="Ribbon负载均衡原理和源码分析"/></a><div class="content"><a class="title" href="/2023/10/05/03.Ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" title="Ribbon负载均衡原理和源码分析">Ribbon负载均衡原理和源码分析</a><time datetime="2023-10-05T00:00:00.000Z" title="发表于 2023-10-05 08:00:00">2023-10-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/01/8.SDS-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2/" title="简单动态字符串（Simple Dynamic String）"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221653984624671.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="简单动态字符串（Simple Dynamic String）"/></a><div class="content"><a class="title" href="/2023/10/01/8.SDS-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2/" title="简单动态字符串（Simple Dynamic String）">简单动态字符串（Simple Dynamic String）</a><time datetime="2023-10-01T00:00:00.000Z" title="发表于 2023-10-01 08:00:00">2023-10-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/30/06.MySQL%E7%9A%844%E7%A7%8D%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6/" title="MySQL中的4种日志"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231101135518134.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="MySQL中的4种日志"/></a><div class="content"><a class="title" href="/2023/09/30/06.MySQL%E7%9A%844%E7%A7%8D%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6/" title="MySQL中的4种日志">MySQL中的4种日志</a><time datetime="2023-09-30T00:00:00.000Z" title="发表于 2023-09-30 08:00:00">2023-09-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/16/MySQL%E5%B8%B8%E8%A7%81%E7%9A%84%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E6%83%85%E5%86%B5/" title="MySQL常见的索引失效的情况"><img src="https://springboot-practice-crud.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231016094025401.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="MySQL常见的索引失效的情况"/></a><div class="content"><a class="title" href="/2023/09/16/MySQL%E5%B8%B8%E8%A7%81%E7%9A%84%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E6%83%85%E5%86%B5/" title="MySQL常见的索引失效的情况">MySQL常见的索引失效的情况</a><time datetime="2023-09-16T00:00:00.000Z" title="发表于 2023-09-16 08:00:00">2023-09-16</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2016 - 2023 By 然后</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container').forEach(node => {
+            if (node.hasAttribute('display')) {
+              btf.wrap(node, 'div', { class: 'mathjax-overflow' })
+            } else {
+              btf.wrap(node, 'span', { class: 'mathjax-overflow' })
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
