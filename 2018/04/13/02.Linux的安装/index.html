@@ -1,0 +1,432 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>Linux的安装 | 然后的学习笔记</title><meta name="author" content="然后"><meta name="copyright" content="然后"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Linux的安装什么是Linux  Linux是一套免费使用和自由传播的操作系统。说到操作系统，大家比较熟知的应该就是Windows和MacOS操作系统，我们今天所学习的Linux也是一款操作系统。 我们可以做以下几个方面的事情：     1). 环境搭建 系统安装 : 一般我们不会直接将Linux系统安装在本机电脑上，而会安装在公司的一台专门的服务器上。  远程连接 : 那么我们要想使用服务器，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux的安装">
+<meta property="og:url" content="http://xitaiye.github.io.git/2018/04/13/02.Linux%E7%9A%84%E5%AE%89%E8%A3%85/index.html">
+<meta property="og:site_name" content="然后的学习笔记">
+<meta property="og:description" content="Linux的安装什么是Linux  Linux是一套免费使用和自由传播的操作系统。说到操作系统，大家比较熟知的应该就是Windows和MacOS操作系统，我们今天所学习的Linux也是一款操作系统。 我们可以做以下几个方面的事情：     1). 环境搭建 系统安装 : 一般我们不会直接将Linux系统安装在本机电脑上，而会安装在公司的一台专门的服务器上。  远程连接 : 那么我们要想使用服务器，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210808232140228.png">
+<meta property="article:published_time" content="2018-04-13T00:00:00.000Z">
+<meta property="article:modified_time" content="2018-04-13T00:00:00.000Z">
+<meta property="article:author" content="然后">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210808232140228.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://xitaiye.github.io.git/2018/04/13/02.Linux%E7%9A%84%E5%AE%89%E8%A3%85/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux的安装',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2018-04-13 08:00:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avator.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">98</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22%E9%9B%AA%E5%A4%A9.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="然后的学习笔记"><img class="site-icon" src="/img/logo.png"/><span class="site-name">然后的学习笔记</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Linux的安装</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-04-13T00:00:00.000Z" title="发表于 2018-04-13 08:00:00">2018-04-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2018-04-13T00:00:00.000Z" title="更新于 2018-04-13 08:00:00">2018-04-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Linux的安装"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Linux的安装"><a href="#Linux的安装" class="headerlink" title="Linux的安装"></a>Linux的安装</h1><h2 id="什么是Linux"><a href="#什么是Linux" class="headerlink" title="什么是Linux"></a>什么是Linux</h2><p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210808232140228.png" alt="image-20210808232140228"> </p>
+<p>Linux是一套免费使用和自由传播的操作系统。说到操作系统，大家比较熟知的应该就是Windows和MacOS操作系统，我们今天所学习的Linux也是一款操作系统。</p>
+<p>我们可以做以下几个方面的事情： </p>
+<img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210808234042174.png" alt="image-20210808234042174" style="zoom:80%;" /> 
+
+<p><strong>1). 环境搭建</strong></p>
+<p>系统安装 : 一般我们不会直接将Linux系统安装在本机电脑上，而会安装在公司的一台专门的服务器上。 </p>
+<p>远程连接 : 那么我们要想使用服务器，一般都是通过远程连接工具连接Linux系统进行操作。</p>
+<p><strong>2). 常用命令</strong></p>
+<p>连接上服务器之后，我们可以通过所学习的相关指令， 来操作Linux服务器，在Linux服务器中可以执行如下操作： </p>
+<p>A. 文件、目录的基本操作(查看,删除,创建等)</p>
+<p>B. 文件及文件夹的拷贝、移动、重命名</p>
+<p>C. 文件的打包、压缩、解压缩操作</p>
+<p>D. 文本的编辑</p>
+<p><strong>3). 安装软件</strong></p>
+<p>基本的常用指令学会操作之后，我们可以在Linux服务器中安装我们开发常用的软件，比如： JDK、Tomcat、MySQL的安装及配置。</p>
+<p><strong>4). 项目部署</strong></p>
+<p>把基础的软件及环境安装配置好之后，我们就可以将我们开发的项目部署在服务器中进行运行并测试。</p>
+<p>对于我们学习Linux操作系统时，Linux命令是基础，也是学习Linux系统的重点内容，虽然Linux的指令有很多，但是我们常用的指令并不多，大家在学习的时候，主要掌握这部分常用的指令就可以了，对于其他的指令，以后我们用到的时候，知道怎么查询即可。</p>
+<h2 id="Linux简介"><a href="#Linux简介" class="headerlink" title="Linux简介"></a>Linux简介</h2><h3 id="主流操作系统"><a href="#主流操作系统" class="headerlink" title="主流操作系统"></a>主流操作系统</h3><p>不同领域的主流操作系统，主要分为以下这么几类： 桌面操作系统、服务器操作系统、移动设备操作系统、嵌入式操作系统。接下来，这几个领域中，代表性的操作系统是那些?</p>
+<p>1). 桌面操作系统</p>
+<table>
+<thead>
+<tr>
+<th>操作系统</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows</td>
+<td>用户数量最多</td>
+</tr>
+<tr>
+<td>MacOS</td>
+<td>操作体验好，办公人士首选</td>
+</tr>
+<tr>
+<td>Linux</td>
+<td>用户数量少(桌面操作系统,Linux使用较少)</td>
+</tr>
+</tbody></table>
+<p>2). 服务器操作系统</p>
+<table>
+<thead>
+<tr>
+<th>操作系统</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Unix</td>
+<td>安全、稳定、付费</td>
+</tr>
+<tr>
+<td>Linux</td>
+<td>安全、稳定、免费、占有率高</td>
+</tr>
+<tr>
+<td>Windows Server</td>
+<td>付费、占有率低</td>
+</tr>
+</tbody></table>
+<p>3). 移动设备操作系统</p>
+<table>
+<thead>
+<tr>
+<th>操作系统</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Android</td>
+<td>基于 Linux 、开源，主要用于智能手机、平板电脑和智能电视</td>
+</tr>
+<tr>
+<td>IOS</td>
+<td>苹果公司开发、不开源，用于苹果公司的产品，例如：iPhone、 iPad</td>
+</tr>
+</tbody></table>
+<p>4). 嵌入式操作系统</p>
+<table>
+<thead>
+<tr>
+<th>操作系统</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Linux</td>
+<td>机顶盒、路由器、交换机</td>
+</tr>
+</tbody></table>
+<h3 id="Linux发展历史"><a href="#Linux发展历史" class="headerlink" title="Linux发展历史"></a>Linux发展历史</h3><p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809000920156.png" alt="image-20210809000920156">  </p>
+<p>时间：1991年</p>
+<p>地点：芬兰赫尔辛基大学</p>
+<p>人物：Linus Torvalds（21岁）</p>
+<p>语言：C语言、汇编语言</p>
+<p>logo：企鹅</p>
+<p>特点：免费、开源(源代码开放)、多用户(同时允许多个用户操作同一个Linux系统)、多任务(同时允许多个任务执行)</p>
+<h3 id="Linux系统版本"><a href="#Linux系统版本" class="headerlink" title="Linux系统版本"></a>Linux系统版本</h3><p>Linux系统的版本分为两种，分别是： 内核版 和 发行版。</p>
+<p><strong>1). 内核版</strong></p>
+<ul>
+<li><p>由Linus Torvalds及其团队开发、维护</p>
+</li>
+<li><p>免费、开源</p>
+</li>
+<li><p>负责控制硬件</p>
+</li>
+</ul>
+<p><strong>2). 发行版</strong></p>
+<ul>
+<li><p>基于Linux内核版进行扩展</p>
+</li>
+<li><p>由各个Linux厂商开发、维护</p>
+</li>
+<li><p>有收费版本和免费版本</p>
+</li>
+</ul>
+<h2 id="Linux安装"><a href="#Linux安装" class="headerlink" title="Linux安装"></a>Linux安装</h2><h3 id="安装方式介绍"><a href="#安装方式介绍" class="headerlink" title="安装方式介绍"></a>安装方式介绍</h3><p>Linux系统的安装方式，主要包含以下两种：</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809184915617.png" alt="image-20210809184915617"> </p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>概述</th>
+<th>场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>物理机安装</td>
+<td>直接将操作系统安装到服务器硬件上</td>
+<td>企业开发中，我们使用的服务器基本都是采用这种方式</td>
+</tr>
+<tr>
+<td>虚拟机安装</td>
+<td>通过虚拟机软件安装</td>
+<td>我们在学习阶段，没有自己服务器，而我们又需要学Linux，就可以安装在虚拟机上</td>
+</tr>
+</tbody></table>
+<p><strong>虚拟机</strong>（Virtual Machine）指通过<strong>软件</strong>模拟的具有完整硬件系统功能、运行在完全隔离环境中的完整计算机系统。常用虚拟机软件： </p>
+<ul>
+<li><p>VMWare </p>
+</li>
+<li><p>VirtualBox</p>
+</li>
+<li><p>VMLite WorkStation</p>
+</li>
+<li><p>Qemu</p>
+</li>
+<li><p>HopeddotVOS</p>
+</li>
+</ul>
+<p>那么我们就可以在课程中将Linux操作系统安装在虚拟机中，我们课上选择的虚拟机软件是VMware。</p>
+<h3 id="安装VMware"><a href="#安装VMware" class="headerlink" title="安装VMware"></a>安装VMware</h3><p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809223354144.png" alt="image-20210809223354144"> </p>
+<p>在我们的课程资料中提供了VMware的安装程序。直接双击运行VMware安装程序，根据提示完成安装即可。</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809223932893.png" alt="image-20210809223932893"> </p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809223953820.png" alt="image-20210809223953820"> </p>
+<p>以上就是VMware在安装时的每一步操作，基本上就是点击 “下一步” 一直进行安装。</p>
+<h3 id="安装Linux"><a href="#安装Linux" class="headerlink" title="安装Linux"></a>安装Linux</h3><p>VMware虚拟机安装完毕之后，我们就可以打开VMware，并在上面来安装Linux操作系统。具体步骤如下： </p>
+<p><strong>1). 选择创建新的虚拟机</strong></p>
+<img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809224601436.png" alt="image-20210809224601436" style="zoom:80%;" /> 
+
+
+
+<p><strong>2). 选择”典型”配置</strong></p>
+<img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809224640245.png" alt="image-20210809224640245"  /> 
+
+
+
+<p><strong>3). 选择”稍后安装操作系统(S)”</strong></p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809224740271.png" alt="image-20210809224740271"> </p>
+<p><strong>4). 选择”Linux”操作系统,”CentOS7 64位”版本</strong></p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809224851755.png" alt="image-20210809224851755"> </p>
+<p><strong>5). 设置虚拟机的名称及系统文件存放路径</strong></p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809225106268.png" alt="image-20210809225106268"> </p>
+<p><strong>6). 设置磁盘容量</strong></p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809225243488.png" alt="image-20210809225243488"> </p>
+<p><strong>7). 自定义硬件信息</strong></p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809225706412.png" alt="image-20210809225706412"> </p>
+<p><strong>8). 启动上述创建的新虚拟机</strong></p>
+<img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809230230390.png" alt="image-20210809230230390" style="zoom:80%;" />  
+
+
+
+<p><strong>9). 选择”Install CentOS7”</strong></p>
+<img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809230720673.png" alt="image-20210809230720673" style="zoom:80%;" /> 
+
+<blockquote>
+<p>进入到Linux系统里面, 我们发现光标无法移动到windows操作系统中了, 这个时候, 我们可以通过快捷键 “Ctrl+Alt” 切换光标到windows系统中。</p>
+</blockquote>
+<p><strong>10). 选择语言为 “简体中文”</strong></p>
+<img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809231002444.png" alt="image-20210809231002444" style="zoom:80%;" /> 
+
+
+
+<p><strong>11). 选择”自动配置分区”</strong></p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809231704202.png" alt="image-20210809231704202">  </p>
+<p>12). 选择”最小安装”</p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809232041661.png" alt="image-20210809232041661"> </p>
+<p><strong>13). 设置”root”用户密码</strong></p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809232438579.png" alt="image-20210809232438579"> </p>
+<p>安装完毕后，点击窗口中的蓝色的 “重启” 按钮，重启Linux系统。</p>
+<p><strong>14). 登录系统</strong></p>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809232913715.png" alt="image-20210809232913715"> </p>
+<blockquote>
+<p><font color='red'>注意 : 在Linux系统中，在命令行中输入密码信息，为了保证安全性，密码是不显示的(看似没有输入，实际已经输入了)；</font></p>
+</blockquote>
+<h3 id="网卡设置"><a href="#网卡设置" class="headerlink" title="网卡设置"></a>网卡设置</h3><p>服务器重启完成之后，我们可以通过linux的指令 <code>ip addr</code> 来查询Linux系统的IP地址，具体信息如下: </p>
+<img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809233341574.png" alt="image-20210809233341574" style="zoom:80%;" /> 
+
+<p>从图中我们可以看到，并没有获取到linux系统的IP地址，这是为什么呢？这是由于启动服务器时未加载网卡，导致IP地址初始化失败而造成的。那么接下来我们就需要来修改网络初始化配置，设定网卡在系统启动时初始化。</p>
+<p><strong>具体操作步骤如下：</strong> </p>
+<p>1). 修改网卡的配置项</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">cd /				进入根目录</span><br><span class="line">cd etc				进入etc目录</span><br><span class="line">cd sysconfig		进入sysconfig目录</span><br><span class="line">cd network-scripts	进入network-scripts</span><br><span class="line">vi ifcfg-ens33		编辑ifcfg-ens33文件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">进入文件后执行如下操作: </span><br><span class="line">①. 按 i 键 		 进入编辑状态</span><br><span class="line">②. 按↑↓键来移动光标, 删除no,输入yes </span><br><span class="line">③. 按 ESC 键</span><br><span class="line">④. 输入 :wq</span><br><span class="line">⑤. 按 ENTER	保存退出</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809234131816.png" alt="image-20210809234131816"> </p>
+<p>2). 重新启动虚拟机</p>
+<img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809234617798.png" alt="image-20210809234617798" style="zoom:80%;" /> 
+
+<p>重启之后, 再次输入root的用户名密码，登录到Linux系统之后，可以通过指令 <code>ip addr</code> 来查看IP地址。</p>
+<img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210809235056773.png" alt="image-20210809235056773"  /> 
+
+
+
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2018/04/14/05.Linux%E7%9A%84%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Linux的常用命令"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210810174954476.png" onerror="onerror=null;src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Linux的常用命令</div></div></a></div><div class="next-post pull-right"><a href="/2018/04/13/03.FinalShell%E7%9A%84%E5%AE%89%E8%A3%85/" title="FinalShell的安装"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%222.jpg" onerror="onerror=null;src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">FinalShell的安装</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2018/04/13/03.FinalShell%E7%9A%84%E5%AE%89%E8%A3%85/" title="FinalShell的安装"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%222.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-13</div><div class="title">FinalShell的安装</div></div></a></div><div><a href="/2023/04/13/04.WSL%E5%AE%89%E8%A3%85UBuntu/" title="WSL安装Ubuntu环境"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231114221457559.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-13</div><div class="title">WSL安装Ubuntu环境</div></div></a></div><div><a href="/2018/04/14/05.Linux%E7%9A%84%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Linux的常用命令"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210810174954476.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-14</div><div class="title">Linux的常用命令</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avator.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">然后</div><div class="author-info__description">记录一下，防止遗忘</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">98</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">Linux的安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFLinux"><span class="toc-number">1.1.</span> <span class="toc-text">什么是Linux</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux%E7%AE%80%E4%BB%8B"><span class="toc-number">1.2.</span> <span class="toc-text">Linux简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E6%B5%81%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.2.1.</span> <span class="toc-text">主流操作系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2"><span class="toc-number">1.2.2.</span> <span class="toc-text">Linux发展历史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E7%B3%BB%E7%BB%9F%E7%89%88%E6%9C%AC"><span class="toc-number">1.2.3.</span> <span class="toc-text">Linux系统版本</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux%E5%AE%89%E8%A3%85"><span class="toc-number">1.3.</span> <span class="toc-text">Linux安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.3.1.</span> <span class="toc-text">安装方式介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85VMware"><span class="toc-number">1.3.2.</span> <span class="toc-text">安装VMware</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Linux"><span class="toc-number">1.3.3.</span> <span class="toc-text">安装Linux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E5%8D%A1%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.3.4.</span> <span class="toc-text">网卡设置</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/11/14/03.1114/" title="Learning to Accept Discomfort Could Help You Thrive"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231114061445805.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="Learning to Accept Discomfort Could Help You Thrive"/></a><div class="content"><a class="title" href="/2023/11/14/03.1114/" title="Learning to Accept Discomfort Could Help You Thrive">Learning to Accept Discomfort Could Help You Thrive</a><time datetime="2023-11-14T00:00:00.000Z" title="发表于 2023-11-14 08:00:00">2023-11-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/13/01.Linux%EF%BC%9AGo%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%8B%E8%BD%BD%E4%B8%8E%E9%85%8D%E7%BD%AE/" title="Linux：Go环境的下载与配置"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22motorcycle.svg" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="Linux：Go环境的下载与配置"/></a><div class="content"><a class="title" href="/2023/11/13/01.Linux%EF%BC%9AGo%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%8B%E8%BD%BD%E4%B8%8E%E9%85%8D%E7%BD%AE/" title="Linux：Go环境的下载与配置">Linux：Go环境的下载与配置</a><time datetime="2023-11-13T00:00:00.000Z" title="发表于 2023-11-13 08:00:00">2023-11-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/06/04.1106/" title="Wild Minds"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231115084153570.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="Wild Minds"/></a><div class="content"><a class="title" href="/2023/11/06/04.1106/" title="Wild Minds">Wild Minds</a><time datetime="2023-11-06T00:00:00.000Z" title="发表于 2023-11-06 08:00:00">2023-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/01/9.Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-intset/" title="Redis数据结构-intset"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221653985304075.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="Redis数据结构-intset"/></a><div class="content"><a class="title" href="/2023/11/01/9.Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-intset/" title="Redis数据结构-intset">Redis数据结构-intset</a><time datetime="2023-11-01T00:00:00.000Z" title="发表于 2023-11-01 08:00:00">2023-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/31/05.1031/" title="How to Stop Taking Work So Personally"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231115084643817.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="How to Stop Taking Work So Personally"/></a><div class="content"><a class="title" href="/2023/10/31/05.1031/" title="How to Stop Taking Work So Personally">How to Stop Taking Work So Personally</a><time datetime="2023-10-31T00:00:00.000Z" title="发表于 2023-10-31 08:00:00">2023-10-31</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2016 - 2023 By 然后</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container').forEach(node => {
+            if (node.hasAttribute('display')) {
+              btf.wrap(node, 'div', { class: 'mathjax-overflow' })
+            } else {
+              btf.wrap(node, 'span', { class: 'mathjax-overflow' })
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

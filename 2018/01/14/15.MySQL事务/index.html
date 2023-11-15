@@ -1,0 +1,296 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>MySQL的事务 | 然后的学习笔记</title><meta name="author" content="然后"><meta name="copyright" content="然后"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="事务场景：学工部整个部门解散了，该部门及部门下的员工都需要删除了。  操作： 12345-- 删除学工部delete from dept where id &#x3D; 1;  -- 删除成功-- 删除学工部的员工delete from emp where dept_id &#x3D; 1; -- 删除失败（操作过程中出现错误：造成删除没有成功）  问题：如果删除部门成功了，而删除该部门的员工时失败了，此时就造成了数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL的事务">
+<meta property="og:url" content="http://xitaiye.github.io.git/2018/01/14/15.MySQL%E4%BA%8B%E5%8A%A1/index.html">
+<meta property="og:site_name" content="然后的学习笔记">
+<meta property="og:description" content="事务场景：学工部整个部门解散了，该部门及部门下的员工都需要删除了。  操作： 12345-- 删除学工部delete from dept where id &#x3D; 1;  -- 删除成功-- 删除学工部的员工delete from emp where dept_id &#x3D; 1; -- 删除失败（操作过程中出现错误：造成删除没有成功）  问题：如果删除部门成功了，而删除该部门的员工时失败了，此时就造成了数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231109145634575.png">
+<meta property="article:published_time" content="2018-01-14T00:00:00.000Z">
+<meta property="article:modified_time" content="2018-01-14T00:00:00.000Z">
+<meta property="article:author" content="然后">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231109145634575.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://xitaiye.github.io.git/2018/01/14/15.MySQL%E4%BA%8B%E5%8A%A1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'MySQL的事务',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2018-01-14 08:00:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avator.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">98</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22mysql.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="然后的学习笔记"><img class="site-icon" src="/img/logo.png"/><span class="site-name">然后的学习笔记</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">MySQL的事务</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-01-14T00:00:00.000Z" title="发表于 2018-01-14 08:00:00">2018-01-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2018-01-14T00:00:00.000Z" title="更新于 2018-01-14 08:00:00">2018-01-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/MySQL/">MySQL</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="MySQL的事务"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>场景：学工部整个部门解散了，该部门及部门下的员工都需要删除了。</p>
+<ul>
+<li><p>操作：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 删除学工部</span></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> dept <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">1</span>;  <span class="comment">-- 删除成功</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 删除学工部的员工</span></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> emp <span class="keyword">where</span> dept_id <span class="operator">=</span> <span class="number">1</span>; <span class="comment">-- 删除失败（操作过程中出现错误：造成删除没有成功）</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>问题：如果删除部门成功了，而删除该部门的员工时失败了，此时就造成了数据的不一致。</p>
+</li>
+</ul>
+<p>​	要解决上述的问题，就需要通过数据库中的事务来解决。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>在实际的业务开发中，有些业务操作要多次访问数据库。一个业务要发送多条SQL语句给数据库执行。需要将多次访问数据库的操作视为一个整体来执行，要么所有的SQL语句全部执行成功。如果其中有一条SQL语句失败，就进行事务的回滚，所有的SQL语句全部执行失败。</p>
+<p>简而言之：事务是一组操作的集合，它是一个不可分割的工作单位。事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。</p>
+<p>事务作用：保证在一个事务中多次操作数据库表中数据时，要么全都成功,要么全都失败。</p>
+<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><p>MYSQL中有两种方式进行事务的操作：</p>
+<ol>
+<li>自动提交事务：即执行一条sql语句提交一次事务。（默认MySQL的事务是自动提交）</li>
+<li>手动提交事务：先开启，再提交</li>
+</ol>
+<p>事务操作有关的SQL语句：</p>
+<table>
+<thead>
+<tr>
+<th>SQL语句</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>start transaction;  &#x2F;  begin ;</td>
+<td>开启手动控制事务</td>
+</tr>
+<tr>
+<td>commit;</td>
+<td>提交事务</td>
+</tr>
+<tr>
+<td>rollback;</td>
+<td>回滚事务</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>手动提交事务使用步骤：</p>
+<ul>
+<li>第1种情况：开启事务  &#x3D;&gt;  执行SQL语句   &#x3D;&gt;  成功  &#x3D;&gt;  提交事务</li>
+<li>第2种情况：开启事务  &#x3D;&gt;  执行SQL语句   &#x3D;&gt;  失败  &#x3D;&gt;  回滚事务</li>
+</ul>
+</blockquote>
+<p>使用事务控制删除部门和删除该部门下的员工的操作：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 开启事务</span></span><br><span class="line"><span class="keyword">start</span> transaction ;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 删除学工部</span></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> tb_dept <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 删除学工部的员工</span></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> tb_emp <span class="keyword">where</span> dept_id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>上述的这组SQL语句，如果如果执行成功，则提交事务</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 提交事务 (成功时执行)</span></span><br><span class="line"><span class="keyword">commit</span> ;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>上述的这组SQL语句，如果如果执行失败，则回滚事务</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 回滚事务 (出错时执行)</span></span><br><span class="line"><span class="keyword">rollback</span> ;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="四大特性"><a href="#四大特性" class="headerlink" title="四大特性"></a>四大特性</h2><p>面试题：事务有哪些特性？</p>
+<ul>
+<li>原子性（Atomicity）：事务是不可分割的最小单元，要么全部成功，要么全部失败。</li>
+<li>一致性（Consistency）：事务完成时，必须使所有的数据都保持一致状态。</li>
+<li>隔离性（Isolation）：数据库系统提供的隔离机制，保证事务在不受外部并发操作影响的独立环境下运行。</li>
+<li>持久性（Durability）：事务一旦提交或回滚，它对数据库中的数据的改变就是永久的。</li>
+</ul>
+<blockquote>
+<p>事务的四大特性简称为：ACID</p>
+</blockquote>
+<ul>
+<li><p><strong>原子性（Atomicity）</strong> ：原子性是指事务包装的一组sql是一个不可分割的工作单元，事务中的操作要么全部成功，要么全部失败。</p>
+</li>
+<li><p><strong>一致性（Consistency）</strong>：一个事务完成之后数据都必须处于一致性状态。</p>
+</li>
+</ul>
+<p>​		如果事务成功的完成，那么数据库的所有变化将生效。</p>
+<p>​		如果事务执行出现错误，那么数据库的所有变化将会被回滚(撤销)，返回到原始状态。</p>
+<ul>
+<li><strong>隔离性（Isolation）</strong>：多个用户并发的访问数据库时，一个用户的事务不能被其他用户的事务干扰，多个并发的事务之间要相互隔离。</li>
+</ul>
+<p>​		一个事务的成功或者失败对于其他的事务是没有影响。</p>
+<ul>
+<li><strong>持久性（Durability）</strong>：一个事务一旦被提交或回滚，它对数据库的改变将是永久性的，哪怕数据库发生异常，重启之后数据亦然存在。</li>
+</ul>
+<p><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231109145634575.png" alt="image-20231109145634575"></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/">MySQL</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2018/01/15/16.%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/" title="事务的隔离级别"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231109150330182.png" onerror="onerror=null;src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">事务的隔离级别</div></div></a></div><div class="next-post pull-right"><a href="/2018/01/12/14.%E5%AD%90%E6%9F%A5%E8%AF%A2/" title="子查询"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%224.jpg" onerror="onerror=null;src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">子查询</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2020/04/16/MySQL%E7%9A%84%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" title="MySQL的存储引擎"><img class="cover" src="https://springboot-practice-crud.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231015225828770.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-16</div><div class="title">MySQL的存储引擎</div></div></a></div><div><a href="/2023/09/16/MySQL%E5%B8%B8%E8%A7%81%E7%9A%84%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E6%83%85%E5%86%B5/" title="MySQL常见的索引失效的情况"><img class="cover" src="https://springboot-practice-crud.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231016094025401.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-16</div><div class="title">MySQL常见的索引失效的情况</div></div></a></div><div><a href="/2018/01/02/01.MySQL%E7%9A%84%E5%AE%89%E8%A3%85/" title="MySQL的安装"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20210916184532212.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-01-02</div><div class="title">MySQL的安装</div></div></a></div><div><a href="/2018/01/03/02.MySQL%E7%9A%84%E5%8D%B8%E8%BD%BD/" title="MySQL的卸载"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20220209203431405.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-01-03</div><div class="title">MySQL的卸载</div></div></a></div><div><a href="/2018/01/05/03.Data%20Definition%20Language(%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80)/" title="Data Definition Language(数据定义语言)"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22%E5%AD%A6%E4%B9%A0.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-01-05</div><div class="title">Data Definition Language(数据定义语言)</div></div></a></div><div><a href="/2018/01/06/04.Data%20Manipulation%20Language(%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C%E8%AF%AD%E8%A8%80)/" title="Data Manipulation Language(数据操作语言)"><img class="cover" src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22%E5%AD%A6%E4%B9%A0.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-01-06</div><div class="title">Data Manipulation Language(数据操作语言)</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avator.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">然后</div><div class="author-info__description">记录一下，防止遗忘</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">98</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1"><span class="toc-number">1.</span> <span class="toc-text">事务</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C"><span class="toc-number">1.2.</span> <span class="toc-text">操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-number">1.3.</span> <span class="toc-text">四大特性</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/11/14/03.1114/" title="Learning to Accept Discomfort Could Help You Thrive"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231114061445805.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="Learning to Accept Discomfort Could Help You Thrive"/></a><div class="content"><a class="title" href="/2023/11/14/03.1114/" title="Learning to Accept Discomfort Could Help You Thrive">Learning to Accept Discomfort Could Help You Thrive</a><time datetime="2023-11-14T00:00:00.000Z" title="发表于 2023-11-14 08:00:00">2023-11-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/13/01.Linux%EF%BC%9AGo%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%8B%E8%BD%BD%E4%B8%8E%E9%85%8D%E7%BD%AE/" title="Linux：Go环境的下载与配置"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22motorcycle.svg" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="Linux：Go环境的下载与配置"/></a><div class="content"><a class="title" href="/2023/11/13/01.Linux%EF%BC%9AGo%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%8B%E8%BD%BD%E4%B8%8E%E9%85%8D%E7%BD%AE/" title="Linux：Go环境的下载与配置">Linux：Go环境的下载与配置</a><time datetime="2023-11-13T00:00:00.000Z" title="发表于 2023-11-13 08:00:00">2023-11-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/06/04.1106/" title="Wild Minds"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231115084153570.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="Wild Minds"/></a><div class="content"><a class="title" href="/2023/11/06/04.1106/" title="Wild Minds">Wild Minds</a><time datetime="2023-11-06T00:00:00.000Z" title="发表于 2023-11-06 08:00:00">2023-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/01/9.Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-intset/" title="Redis数据结构-intset"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221653985304075.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="Redis数据结构-intset"/></a><div class="content"><a class="title" href="/2023/11/01/9.Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-intset/" title="Redis数据结构-intset">Redis数据结构-intset</a><time datetime="2023-11-01T00:00:00.000Z" title="发表于 2023-11-01 08:00:00">2023-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/31/05.1031/" title="How to Stop Taking Work So Personally"><img src="https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%22image-20231115084643817.png" onerror="this.onerror=null;this.src='https://image-oss-myimages.oss-cn-beijing.aliyuncs.com/%22D:%5Crepos%5Cblogimages%221.jpg'" alt="How to Stop Taking Work So Personally"/></a><div class="content"><a class="title" href="/2023/10/31/05.1031/" title="How to Stop Taking Work So Personally">How to Stop Taking Work So Personally</a><time datetime="2023-10-31T00:00:00.000Z" title="发表于 2023-10-31 08:00:00">2023-10-31</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2016 - 2023 By 然后</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container').forEach(node => {
+            if (node.hasAttribute('display')) {
+              btf.wrap(node, 'div', { class: 'mathjax-overflow' })
+            } else {
+              btf.wrap(node, 'span', { class: 'mathjax-overflow' })
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
